@@ -71,8 +71,10 @@ intent:
   openai_api:
     enabled: true
     base_url: "http://127.0.0.1:1234/v1"
-    model: "local-model"
+    model: "qwen3/qwen3-4b-k_m"
     api_key: "lm-studio"
+    # 启用 non-thinking 模式（/no_think）
+    enable_no_think: true
 
 # ============================================================
 # LoL - LCU 客户端连接
