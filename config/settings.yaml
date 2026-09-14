@@ -1,0 +1,200 @@
+# ============================================================
+# LoL × 本地音乐 × 语音 Agent - 全局配置
+# ============================================================
+
+app:
+  name: "LoL Music Agent"
+  version: "0.1.0"
+  log_level: "INFO"
+  data_dir: "./data"
+  log_dir: "./logs"
+
+# ============================================================
+# 音乐模块
+# ============================================================
+music:
+  # 音乐扫描目录（可多个）
+  scan_dirs:
+    - "D:\\落雪\\音乐文件"
+  # 支持的格式
+  extensions: [".mp3", ".flac", ".wav", ".m4a", ".ogg", ".ape"]
+  # 数据库
+  database: "./data/music.db"
+  # mpv 路径
+  mpv_path: "D:\\新建文件夹 (2)\\mpv.exe"
+  # mpv IPC 管道名
+  mpv_ipc_pipe: "\\\\.\\pipe\\lol_music_mpv"
+  # 默认音量 0-100
+  default_volume: 70
+  # 播放队列大小
+  queue_size: 50
+
+# ============================================================
+# 语音识别 ASR
+# ============================================================
+asr:
+  # 引擎: faster_whisper | qwen3
+  engine: "faster_whisper"
+  # Faster-Whisper 配置
+  faster_whisper:
+    model_size: "small"  # tiny / base / small / medium / large-v3
+    device: "cpu"        # cpu / cuda
+    compute_type: "int8" # int8 / int8_float16 / float16 / float32
+  # Qwen3-ASR 模型路径（需要 llama-cpp-python，暂不可用）
+  qwen3_asr_model: "D:\\迅雷下载\\ggml-org\\Qwen3-ASR-0.6B-GGUF\\Qwen3-ASR-0.6B-Q8_0.gguf"
+  qwen3_asr_mmproj: "D:\\迅雷下载\\ggml-org\\Qwen3-ASR-0.6B-GGUF\\mmproj-Qwen3-ASR-0.6B-bf16.gguf"
+  # VAD
+  vad_enabled: true
+  vad_silence_duration: 500  # ms
+  # 采样率
+  sample_rate: 16000
+  # 推送到 Talk（PTT）快捷键，None 表示持续监听
+  ptt_key: null
+
+# ============================================================
+# Intent / 人话理解
+# ============================================================
+intent:
+  # 模型路径（llama-cpp-python 直接加载，需要 C++ 编译器）
+  model_path: "D:\\迅雷下载\\enacimie\\Qwen3-4B-Q4_K_M-GGUF\\qwen3-4b-q4_k_m.gguf"
+  # 备用模型
+  backup_model_path: "D:\\迅雷下载\\jtl11\\Jinx-Qwen3-4B-Q5_K_M-GGUF\\jinx-qwen3-4b-q5_k_m.gguf"
+  # 上下文长度
+  n_ctx: 4096
+  # 线程数
+  n_threads: 6
+  # 温度
+  temperature: 0.1
+  # 规则匹配优先（明确命令不走 LLM）
+  rule_based_first: true
+  # OpenAI 兼容 API（LM Studio / Ollama）
+  openai_api:
+    enabled: true
+    base_url: "http://127.0.0.1:1234/v1"
+    model: "local-model"
+    api_key: "lm-studio"
+
+# ============================================================
+# LoL - LCU 客户端连接
+# ============================================================
+lcu:
+  enabled: true
+  # 连接重试间隔（秒）
+  reconnect_interval: 5
+  # 进程名
+  process_name: "LeagueClientUx.exe"
+  # 锁文件路径（自动检测，可手动覆盖）
+  lockfile_path: null
+
+# ============================================================
+# LoL - Live Client Data API (2999)
+# ============================================================
+live_client:
+  enabled: true
+  base_url: "https://127.0.0.1:2999"
+  # 轮询间隔（秒）
+  poll_interval: 1.0
+  # 跳过 SSL 验证（本地自签名证书）
+  verify_ssl: false
+
+# ============================================================
+# GameAlarm 游戏计时与提醒
+# ============================================================
+game_alarm:
+  enabled: true
+  # 潮虫先锋刷新前提醒（秒）
+  rift_herald_lead: 60
+  # 小龙刷新前提醒（秒）
+  dragon_lead: 40
+  # 男爵刷新前提醒（秒）
+  baron_lead: 40
+  # 闪现冷却默认（秒）
+  flash_cooldown: 300
+  # 眼位持续时间（秒）
+  ward_duration: 120
+  # 允许误差（秒）
+  tolerance: 10
+
+# ============================================================
+# 玩家数据
+# ============================================================
+player:
+  enabled: true
+  database: "./data/player.db"
+  # 缓存时长（小时）
+  cache_hours: 24
+  # 预加载（进入 Lobby 时查询）
+  lobby_preload: true
+
+# ============================================================
+# TTS 语音输出
+# ============================================================
+tts:
+  enabled: true
+  # 引擎: edge | kokoro
+  engine: "edge"
+  # Edge TTS 语音
+  edge_voice: "zh-CN-XiaoxiaoNeural"
+  # 语速
+  rate: "+0%"
+  # 音量
+  volume: "+0%"
+  # 输出目录
+  output_dir: "./data/tts"
+
+# ============================================================
+# Speech Judge 播报控制
+# ============================================================
+speech_judge:
+  # 全局播报强度: sparse | normal | detailed
+  intensity: "sparse"
+  # 最低播报等级: S | A | B | C | DROP
+  min_level: "B"
+  # 击杀聚合窗口（秒）
+  kill_aggregate_window: 3.0
+  # 同一事件最小间隔（秒）
+  min_interval: 5.0
+
+# ============================================================
+# 自动操作（可选）
+# ============================================================
+auto:
+  auto_accept:
+    enabled: false
+    delay_ms: 0
+  auto_ban_pick:
+    enabled: false
+    # 预设配置
+    presets: []
+
+# ============================================================
+# 资源优先级
+# ============================================================
+resource:
+  # P0 核心进程优先级
+  p0_priority: "high"
+  # P1
+  p1_priority: "above_normal"
+  # P2
+  p2_priority: "normal"
+  # P3
+  p3_priority: "below_normal"
+  # Qwen 模型线程限制
+  qwen_max_threads: 6
+  # ASR 线程限制
+  asr_max_threads: 4
+
+# ============================================================
+# UI
+# ============================================================
+ui:
+  enabled: true
+  # 窗口标题
+  title: "LoL Music Agent"
+  # 窗口大小
+  width: 1200
+  height: 800
+  # 主题
+  theme: "dark"
+  # 刷新间隔（毫秒）
+  refresh_interval: 500
